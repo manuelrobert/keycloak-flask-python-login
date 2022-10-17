@@ -1,0 +1,6 @@
+/keycloak_themes
+/postgres_data
+/sql
+/env
+*/users.db
+*/app/__pycache__

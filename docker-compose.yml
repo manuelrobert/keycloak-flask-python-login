@@ -1,0 +1,68 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:13.2
+    container_name: db
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d/:ro
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT:-5432}:5432
+    networks:
+      - pg-kc-fk
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.2
+    command: start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
+    container_name: keycloak
+    restart: always
+    volumes:
+      - ./keycloak_themes:/opt/keycloak/themes
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: ${DATABASE_USER}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_IMPORT: /tmp/realm-export.json
+    depends_on:
+      - postgres
+    ports:
+      - ${KEYCLOAK_PORT:-8080}:8080
+    networks:
+      - pg-kc-fk
+
+  flask_app_1:
+    build: .
+    volumes:
+      - ./flask_app_1:/flask_app
+    depends_on:
+      - keycloak
+    ports:
+      - ${FLASK_APP_1_PORT:-5000}:5000
+    networks:
+      - pg-kc-fk
+
+  flask_app_2:
+    build: .
+    volumes:
+      - ./flask_app_2:/flask_app
+    depends_on:
+      - keycloak
+    ports:
+      - ${FLASK_APP_2_PORT:-6000}:5000
+    networks:
+      - pg-kc-fk
+
+networks:
+  pg-kc-fk:
+    driver: bridge
+    name: pg-kc-fk_net

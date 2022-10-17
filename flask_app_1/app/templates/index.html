@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  {% if user_logged_in %}
+  <h1>Welcome, {{ user }}</h1>
+  <ol>
+    <li><h2><a href="http://localhost:8080/realms/MyDemo/account/?referrer=test-client&referrer_uri=http://localhost:5000/login&">Account</a></h2></li>
+    <li><h2><a href="/profile">Profile</a></h2></li>
+    <li><h2><a href="/logout">Logout</a></h2></li>
+  </ol>
+  {% else %}
+  <h1>Welcome, Click to <a href="/login">Log in</a></h1>
+  {% endif %}
+</body>
+
+</html>
