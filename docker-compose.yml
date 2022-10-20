@@ -46,10 +46,7 @@ services:
       - ./flask_app_1:/flask_app
     depends_on:
       - keycloak
-    ports:
-      - ${FLASK_APP_1_PORT:-5000}:5000
-    networks:
-      - pg-kc-fk
+    network_mode: "host"  
 
   flask_app_2:
     build: .
@@ -57,12 +54,10 @@ services:
       - ./flask_app_2:/flask_app
     depends_on:
       - keycloak
-    ports:
-      - ${FLASK_APP_2_PORT:-6000}:5000
-    networks:
-      - pg-kc-fk
+    network_mode: "host"  
 
 networks:
   pg-kc-fk:
     driver: bridge
     name: pg-kc-fk_net
+

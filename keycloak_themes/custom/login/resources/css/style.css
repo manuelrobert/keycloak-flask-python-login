@@ -1,0 +1,18 @@
+/* .login-pf body {
+    background: #39a5dc;
+    background-size: cover;
+    height: 100%;
+} */
+
+
+/* .login-pf body {
+    background: DimGrey none;
+} */
+
+.login-pf body {
+    background-image: url('../img/bg5.jpg');
+    background-size: cover;
+}
+#kc-header-wrapper {
+    color: #3344d0;
+}

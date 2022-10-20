@@ -1,4 +1,4 @@
-FROM python:3.8-alpine
+FROM python:3.10-alpine
 
 COPY ./requirements.txt /flask_app/requirements.txt
 
@@ -12,4 +12,4 @@ ENV FLASK_APP=app
 
 ENV FLASK_DEBUG=1
 
-CMD [ "flask", "run", "--host=0.0.0.0"]
+CMD [ "python", "run.py"]
