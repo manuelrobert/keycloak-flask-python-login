@@ -24,14 +24,7 @@ keyclaok = oauth.register(
     client_id=os.getenv('CLIENT_ID'),
     client_secret=os.getenv('CLIENT_SECRET'),
     server_metadata_url=f'{base_url}/.well-known/openid-configuration',
-    access_token_url=f'{base_url}/protocol/openid-connect/token',
-    access_token_params=None,
-    authorize_url=f'{base_url}/protocol/openid-connect/auth',
-    authorize_params=None,
-    api_base_url=base_url,
-    userinfo_endpoint=f'{base_url}/protocol/openid-connect/userinfo',
     client_kwargs={'scope': 'openid email profile'},
-    jwks_uri=f'{base_url}/protocol/openid-connect/certs',
 )
 
 def login_required(f):
@@ -94,8 +87,7 @@ def logout():
         refresh_token = user_data.get('refresh_token', None)
         user_info = user_data.get('userinfo')
         client_id = user_info.get('azp', None)
-        user_name = user_info.get('preferred_username', None)
-        resp = logout_user(access_token, refresh_token, client_id, user_name)
+        resp = logout_user(access_token, refresh_token, client_id)
         print(resp)
 
         for key in list(session.keys()):
@@ -116,7 +108,7 @@ def check_roles(access_token):
         return True
     return False
 
-def logout_user(access_token, refresh_token, client_id, user_name):
+def logout_user(access_token, refresh_token, client_id):
     encoded_redirect_uri = urllib.parse.quote(os.getenv('REDIRECT_URI').encode('utf8'))
     headers = {'Authorization': 'Bearer %s' % (access_token)}
     data = {'client_id': client_id, 'client_secret': os.getenv('CLIENT_SECRET'), 'refresh_token': refresh_token}

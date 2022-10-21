@@ -24,14 +24,7 @@ keyclaok = oauth.register(
     client_id=os.getenv('CLIENT_ID'),
     client_secret=os.getenv('CLIENT_SECRET'),
     server_metadata_url=f'{base_url}/.well-known/openid-configuration',
-    access_token_url=f'{base_url}/protocol/openid-connect/token',
-    access_token_params=None,
-    authorize_url=f'{base_url}/protocol/openid-connect/auth',
-    authorize_params=None,
-    api_base_url=base_url,
-    userinfo_endpoint=f'{base_url}/protocol/openid-connect/userinfo',
     client_kwargs={'scope': 'openid email profile'},
-    jwks_uri=f'{base_url}/protocol/openid-connect/certs',
 )
 
 def login_required(f):
